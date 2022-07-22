@@ -1,0 +1,153 @@
+<!-- <ion-header>
+      <ion-title class="check">Checked<span class="in">in</span></ion-title>
+        <ion-button class="join" (click)="navigateTo('login')">Login</ion-button>
+</ion-header>
+<ion-content>
+  <form [formGroup]="signupFrm" (ngSubmit)="userSign()" novalidate>
+    <h1 class="signup">Signup</h1>
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [ngClass]="{'is-invalid' : checkFrm && loginFrm.controls.name.errors }" type="text" formControlName="name" required></ion-input>
+    </ion-item>
+    <span class="error ion-padding" *ngIf="checkFrm && loginFrm.controls.name.errors?.required">
+      Insert Your Name Id
+    </span>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [ngClass]="{'is-invalid' : checkFrm && loginFrm.controls.email.errors }" type="text" formControlName="email" required></ion-input>
+    </ion-item>
+    <span class="error ion-padding" *ngIf="checkFrm && loginFrm.controls.email.errors?.required">
+      Insert Your Email Id
+    </span>
+  
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [ngClass]="{'is-invalid' : checkFrm && loginFrm.controls.password.errors }" formControlName="password" [type]="showPwd ? 'text' : 'password'"  required></ion-input>
+      <ion-icon class="eye" slot="end" [name]="pwdIcon" (click)="togglePwd()"> </ion-icon>
+    </ion-item>
+    <span class="error ion-padding" *ngIf="checkFrm && loginFrm.controls.password.errors?.required">
+      Password is required.
+    </span>
+    <p class="text-danger text-center">{{ errMsg }}</p>
+  
+    <ion-row>
+    <ion-col size="8" class="forgot">
+      <span id="forget-password-lable" (click)="forgotPassword()">
+        <i class="fas fa-hand-point-right"></i>
+        Forgot password?
+      </span>
+    </ion-col>
+  </ion-row>
+
+    <section>
+      <ion-button class="create" expand="full" shape="round" type="submit">Continue</ion-button>
+    </section>
+  
+    <div id="or-separator" class="or-separator mt-12 snapple-seperator"><span class="or-text">or</span></div>
+
+    <section>
+      <ion-button color="light" type="outline" class="log" expand="full" shape="round"><img src="../../assets/icons8-google-48.png" height="30px" width="30px">Sign in with Google</ion-button>
+      <ion-button color="light" type="outline" class="log mt-2" expand="full" shape="round"><img src="../../assets/apple.png" height="30px" width="30px">Sign in with Apple</ion-button>
+    </section>
+  </form>
+ -->
+  <!-- </ion-content> -->
+
+
+  <ion-header>
+    <ion-title class="check">Checked<span class="in">in</span></ion-title>
+      <ion-button class="join" (click)="navigateTo('login')">Login</ion-button>
+  </ion-header>
+  
+  <ion-content class="sign-up-content">
+    <form [formGroup]="signUpForm" (ngSubmit)="signUpWithEmail()">
+      <ion-list class="inputs-list" lines="full">
+
+        <ion-item no-padding class="animated fadeInUp">
+          <ion-label position="floating">
+            <ion-icon name="person-circle-outline" item-start></ion-icon>
+            Name
+          </ion-label>
+          <ion-input class="inputf" color="secondary" type="text" formControlName="name"></ion-input>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.name">
+            <div class="error-message" *ngIf="signUpForm.get('name').hasError(validation.type) && (signUpForm.get('name').dirty || signUpForm.get('name').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+  
+        <ion-item no-padding class="animated fadeInUp">
+          <ion-label position="floating">
+            <ion-icon name="mail" item-start></ion-icon>
+            Email
+          </ion-label>
+          <ion-input color="secondary" type="email" formControlName="email"></ion-input>
+        </ion-item>
+  
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.email">
+            <div class="error-message" *ngIf="signUpForm.get('email').hasError(validation.type) && (signUpForm.get('email').dirty || signUpForm.get('email').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+  
+        <ion-item no-padding class="animated fadeInUp">
+          <ion-label position="floating">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            Password
+          </ion-label>
+          <ion-input color="secondary" [type]="showPwd ? 'text' : 'password'" formControlName="password"></ion-input>
+          <ion-icon class="eye" slot="end" [name]="pwdIcon" (click)="togglePwd()"></ion-icon>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.password">
+            <div class="error-message" *ngIf="signUpForm.get('password').hasError(validation.type) && (signUpForm.get('password').dirty || signUpForm.get('password').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+
+        <ion-item no-padding class="animated fadeInUp">
+          <ion-label position="floating">
+            <ion-icon name="call"></ion-icon>
+            Phone number
+          </ion-label>
+          <ion-input color="secondary" type="number" formControlName="phone" [maxlength]="12" [required]="true"></ion-input>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.phone">
+            <div class="error-message" *ngIf="signUpForm.get('phone').hasError(validation.type) && (signUpForm.get('phone').dirty || signUpForm.get('phone').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+  
+      <ion-button class="sign-up-btn" type="submit" expand="block" [disabled]="signUpForm.invalid" >Sign Up</ion-button>
+      <div class="error-container">
+        <!-- <div class="error-message">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <span>{{ submitError }}</span>
+        </div> -->
+      </div>
+      <ion-row class="sign-in-btn-wrapper">
+        <ion-button class="sign-in-btn" fill="clear" (click)="navigateTo('login')">
+          Already have an account?
+        </ion-button>
+      </ion-row>
+    </form>
+  
+    <div class="social-auth-options">
+      <div id="or-separator" class="or-separator mt-12 snapple-seperator"><span class="or-text">or</span></div>
+      <ion-button color="light" type="outline" class="log" expand="full" shape="round"><img src="../../assets/icons8-google-48.png" height="30px" width="30px">Sign in with Google</ion-button>
+      <ion-button color="light" type="outline" class="log mt-2" expand="full" shape="round"><img src="../../assets/apple.png" height="30px" width="30px">Sign in with Apple</ion-button>
+    </div>
+  </ion-content>

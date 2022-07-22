@@ -1,0 +1,113 @@
+<ion-content class="verify-phone">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-padding" *ngIf ="!stapOne" (click)="back()">
+        <span class="change-number">
+          <i class="fas fa-chevron-left"></i>
+          Change number
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="img" style=" background-image:url('../assets/images/mobile-verify.svg');">
+        </div>
+      </ion-col>
+    </ion-row>
+    <span *ngIf ="stapOne">
+      <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col class="ion-text-center text" size="12">
+          <span class="verify-text">
+            Verify Your Number
+          </span> 
+        
+        </ion-col>
+        <ion-col class="ion-text-center text" size="12">
+        
+          <span class="sub-text">
+            Please enter your Country & your Phone Number
+          </span>
+        </ion-col>
+      </ion-row>
+      <!-- <form [formGroup]="editFullNameForm"> -->
+  
+        <ion-row class="ion-padding-start ion-padding-end ion-padding-top input-class">
+          <ion-col class="ion-no-padding phone-number ion-padding-start ion-padding-end">
+            <international-phone-number [(ngModel)]="person.phoneNumber" placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}"
+              [maxlength]="20" [required]="true" [defaultCountry]="countryCodeData" #phoneNumber="ngModel"
+              name="phoneNumber" (input)="checkPhoneForEditProfile(person.phoneNumber)">
+            </international-phone-number>
+            <!-- <ion-spinner *ngIf="showPhoneLoading" class="checkDublicationError" name="dots">
+            </ion-spinner> -->
+          </ion-col>
+        </ion-row>
+        <p *ngIf="checkPhoneErrMsg" class="error">
+          {{checkPhoneErrMsg}}
+        </p>
+      <!-- </form> -->
+  
+        <ion-row>
+          <ion-col class="ion-no-padding ion-padding-start ion-padding-end ion-margin-top ion-padding-top" offset="2" size="8">
+            <!-- <ion-button size="large" expand="block" [disabled]="(!loginForm.valid)" fill="outline" -->
+            <ion-button size="large" expand="block" fill="outline" (click)="sendOtp()"
+              class="btn default-button" [disabled]="(!phoneNumber.valid) || alradyPhoneStatus">
+              <span>
+                <i class="fas fa-sign-in-alt fa-1px"> </i>
+                SEND
+              </span>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+    </span>
+
+    <span *ngIf ="!stapOne">
+      <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col class="ion-text-center text">
+          <span class="verify-text">
+            Verification Code 
+          </span> 
+        </ion-col>
+        <ion-col class="ion-text-center text">
+          <span class="sub-text">
+            Please enter Code sent to <span class="number">
+              {{person.phoneNumber}}
+            </span>
+          </span>
+        </ion-col>
+      </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="remove-border">
+            <ion-input class="code ion-no-padding" type="tel"  maxlength="4" minlength="4" placeholder ="" autofocus [(ngModel)]="smsCodeValue">
+            </ion-input>
+          </ion-col>
+          <p *ngIf="otpNotMatch" class="otp-error">
+            {{otpNotMatch}}
+          </p>
+        </ion-row>
+  
+        <ion-row>
+          <ion-col class="ion-no-padding ion-padding-start ion-padding-end ion-margin-top ion-padding-top" offset="2" size="8">
+            <!-- <ion-button size="large" expand="block" [disabled]="(!loginForm.valid)" fill="outline" -->
+            <ion-button size="large" expand="block" fill="outline" (click)="verify()"
+              class="btn default-button">
+              <span>
+                <i class="fas fa-sign-in-alt fa-1px"> </i>
+                VERIFY
+              </span>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center ion-padding resend" (click)="sendOtp()">
+           <span>
+             Resend Code
+           </span>
+          </ion-col>
+        </ion-row>
+
+       
+    </span>
+
+  </ion-grid>
+</ion-content>
