@@ -2,13 +2,21 @@
 import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, Subject, of, Subscription, BehaviorSubject } from 'rxjs';
 import { NavigationService } from '../services/navigation.service';
+import { finalize } from 'rxjs/operators';
 import { map, switchMap } from 'rxjs/operators';
 import * as firebase from 'firebase/compat/app';
 import  'firebase/auth';
 
+export interface UserPro{
+  username: string;
+  uid: string;
+}
+
 export interface User {
+
   id: string;
   name: string;
   email: string;
@@ -34,12 +42,16 @@ export class UserService {
   response: { status: number; message: string; data: any};
   action: string | null = null;
   actionTypeSource = new BehaviorSubject(this.action);
+  private user: UserPro;
+  private authenticationStatusSubject = new Subject<Observable<any>>();
+  private tableName: string | null = null;
 
   constructor(
     public _afs: AngularFirestore,
     public angularFireAuth: AngularFireAuth,
     public _ngZone: NgZone,
-    public routerService: NavigationService
+    public routerService: NavigationService,
+    private storage: AngularFireStorage
   ) {
     // this.checkAuth();
     this.userCollection = this._afs.collection<User>('Users');
@@ -242,6 +254,12 @@ export class UserService {
     return obj;
   }
 
+  getUser(){
+    const userData = localStorage.getItem('user');
+    console.log('******===========******',userData);
+    return JSON.parse(userData);
+  }
+
   logout(){
     this.currentUser= null;
     this.currentUserDataSource.next(this.currentUser);
@@ -250,5 +268,34 @@ export class UserService {
     this.routerService.navigateTo('login');
   }
 
+  //=====================================uploading======================================//
+
+  uploadFile(file: any, user: any): Observable<any> {
+    const filePath = `${file.name}`;
+    const storageRef = this.storage.ref(filePath);
+    const uploadTask = this.storage.upload(filePath, file);
+    const obs = new Observable((observer) => {
+      uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+         storageRef.getDownloadURL().subscribe(downloadURL => {
+          console.log('downloadURL----------', downloadURL);
+          this.updateUserPhoto(user,downloadURL );
+          file.url = downloadURL;
+          // file.name = file.file.name;
+          observer.next({
+            url : downloadURL
+          });
+        });
+      })
+      ).subscribe();
+    });
+    return obs;
+  }
+  public updateUserPhoto(user: any, downloadURL: any){
+    const updateData =  {
+      photo : downloadURL
+    };
+    this._afs.collection('Users').doc(user.id).update(updateData).then();
+  }
 
 }

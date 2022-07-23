@@ -13,7 +13,7 @@
       <img src="../../../assets/11.jpeg">
       <h1 class="fw500">Akshya Kumar</h1>
       <h2 color="light" margin-bottom>Actor</h2>
-      <ion-button icon-left color="secondary" (click)="takePicture()">
+      <ion-button icon-left color="secondary" (change)="upload($event)" (click)="selectImage($event)">
         <ion-icon name="photos"></ion-icon> 
         Edit / Add Avatar
       </ion-button><br>

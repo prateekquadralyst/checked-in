@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { ActionSheetController } from '@ionic/angular';
 import { UserService } from 'src/app/api-services/user.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
+import { Camera, CameraDirection, CameraOptions, CameraResultType, CameraSource} from '@capacitor/camera';
 
 @Component({
   selector: 'app-profile',
@@ -12,12 +13,46 @@ import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection
 })
 export class ProfilePage {
 
+  imageElement: any;
+  camera: any;
+  ref: any;
+  task: any;
+  logedInInfo: any[] = [];
+  photoAddStatus: boolean;
+  public photo: string | null;
+
   constructor(
     private actionSheetController: ActionSheetController,
     private userService: UserService,
     private globalService: GlobalService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private angularFireStorage: AngularFireStorage
   ) { }
+
+    takePicture = async (type: string) => {
+      const comeraOptions: CameraOptions = {
+        allowEditing: false,
+        correctOrientation: true,
+        direction: CameraDirection.Front,
+        quality: 95,
+        resultType: CameraResultType.Base64,
+        source: null,
+        saveToGallery: true
+      };
+
+    if (type === 'camera') {
+      comeraOptions.source = CameraSource.Camera;
+    } else {
+      comeraOptions.source = CameraSource.Photos;
+    }
+
+    await Camera.getPhoto(comeraOptions).then(async profilePhoto => {
+      this.photoAddStatus = true;
+      this.photo = profilePhoto.base64String;
+      console.log('(((((((((((+++++++++++))))))))))',this.photo);
+    });
+  };
+
 
    // pickImage(sourceType) {
   //   const options: CameraOptions = {
@@ -34,29 +69,30 @@ export class ProfilePage {
   // }
 
 
-  // async selectImage() {
-  //   const actionSheet = await this.actionSheetController.create({
-  //     header: 'Select Image source',
-  //     buttons: [{
-  //       text: 'Load from Library',
-  //       handler: () => {
-  //         this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
-  //       }
-  //     },
-  //     {
-  //       text: 'Use Camera',
-  //       handler: () => {
-  //         this.pickImage(this.camera.PictureSourceType.CAMERA);
-  //       }
-  //     },
-  //     {
-  //       text: 'Cancel',
-  //       role: 'cancel'
-  //     }
-  //     ]
-  //   });
-  //   await actionSheet.present();
-  // }
+  async selectImage(event) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Please Select Option',
+      mode: 'ios',
+      buttons: [{
+        text: 'Gallery',
+        icon: 'image',
+        handler: () => {
+          this.takePicture(event);
+        }
+      },
+      // {
+      //   text: 'Use Camera',
+      //   handler: () => {
+      //   }
+      // },
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      }
+      ]
+    });
+    await actionSheet.present();
+  }
 
 
   async logout(): Promise<void>{
