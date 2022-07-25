@@ -46,6 +46,14 @@ export class GlobalService {
       this.submitLoading = await this.loadingController.dismiss();
       this.lodingStatus = false;
     }
+  }
 
+  async showToastMessage(msg: any) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 4000,
+      position: 'top',
+    });
+    toast.present();
   }
 }

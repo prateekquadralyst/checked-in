@@ -1,25 +1,22 @@
-<!-- <ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Profile</ion-title>
-  </ion-toolbar>
-</ion-header> -->
 
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
 <ion-content class="profile">
   <ion-card no-margin>
     <ion-card-content class="bg-profile">
-      <img src="../../../assets/11.jpeg">
-      <h1 class="fw500">Akshya Kumar</h1>
+      <img *ngIf="currentUser" src="{{currentUser.photo}}">
+      <h1 class="fw500" *ngIf="currentUser">{{currentUser.name}}</h1>
       <h2 color="light" margin-bottom>Actor</h2>
-      <ion-button icon-left color="secondary" (change)="upload($event)" (click)="selectImage($event)">
-        <ion-icon name="photos"></ion-icon> 
-        Edit / Add Avatar
+      <ion-button icon-left color="secondary" type="file" (change)="upload($event)" (click)="selectImage($event)">
+        <ion-icon name="image"></ion-icon> 
+        Add Avatar
       </ion-button><br>
       <ion-button icon-right color="danger" (click)="logout()">Logout</ion-button>
+      <!-- {{currentUser | json}} -->
     </ion-card-content>
-  
     <ion-grid fixed no-padding>
       <ion-row>
         <ion-col size="12" padding>
@@ -29,14 +26,18 @@
               <ion-label class="fw700">Form</ion-label>
             </ion-list-header>
 
-            <ion-item>
+            <ion-item *ngIf="currentUser">
               <ion-label color="dark" position="stacked">Full Name:</ion-label>
-              <ion-input inputmode="text" placeholder="Name"></ion-input>
+              {{currentUser.name}}
             </ion-item>
     
-            <ion-item>
+            <ion-item *ngIf="currentUser">
               <ion-label color="dark" position="stacked">Email:</ion-label>
-              <ion-input inputmode="email" placeholder="Email"></ion-input>
+              {{currentUser.email}}
+            </ion-item>
+            <ion-item *ngIf="currentUser">
+              <ion-label color="dark" position="stacked">Mobile:</ion-label>
+              {{currentUser.phone}}
             </ion-item>
     
             <ion-item>

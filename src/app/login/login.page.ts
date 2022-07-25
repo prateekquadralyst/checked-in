@@ -139,12 +139,15 @@ export class LoginPage {
               // console.log('data.message.code', data.message.code)
               if (data.message.code === 'auth/user-not-found') {
                 this.errorMsg = 'This user does not exist. Please create an account';
+                this.globalService.showToastMessage(this.errorMsg);
                 this.ref.detectChanges();
               } else if (data.message.code === 'auth/wrong-password') {
                 this.errorMsg = 'This password is wrong';
+                this.globalService.showToastMessage(this.errorMsg);
                 this.ref.detectChanges();
               } else {
                 this.errorMsg = data.message;
+                this.globalService.showToastMessage(this.errorMsg);
                 this.ref.detectChanges();
               }
 
@@ -156,43 +159,43 @@ export class LoginPage {
         );
 
       } else {
-        this.subscriptions.push(
-          this.userService.checkPhone(this.loginForm.value.email).subscribe(userInfo => {
-            console.log('#########++++++++########',userInfo);
-            if (userInfo.length) {
-              this.loginForm.value.email = userInfo[0].email;
-              this.subscriptions.push(
-                this.userService.loginUser(this.loginForm.value).subscribe(data => {
-                  console.log('======7777777=======', data);
-                  if (data.status === 200) {
-                    this.globalService.hideLoading();
-                    this.routerService.navigateTo('timeline');
-                  } else {
-                    this.globalService.hideLoading();
-                    if (data.message.code === 'auth/user-not-found') {
-                      this.errorMsg = 'This user does not exist. Please create an account';
-                      this.ref.detectChanges();
-                    } else if (data.message.code === 'auth/wrong-password') {
-                      this.errorMsg = 'This password is wrong';
-                      this.ref.detectChanges();
-                    } else {
-                      this.errorMsg = data.message;
-                      this.ref.detectChanges();
-                    }
-                  }
-                }, error => {
-                  console.error('error', error);
-                  this.globalService.hideLoading();
-                  console.log('There are some error in fetching user Info');
-                })
-              );
-            } else {
-              this.globalService.hideLoading();
-              this.errorMsg = 'This user does not exist. Please create an account';
-              this.ref.detectChanges();
-            }
-          })
-        );
+        // this.subscriptions.push(
+        //   this.userService.checkPhone(this.loginForm.value.email).subscribe(userInfo => {
+        //     console.log('#########++++++++########',userInfo);
+        //     if (userInfo.length) {
+        //       this.loginForm.value.email = userInfo[0].email;
+        //       this.subscriptions.push(
+        //         this.userService.loginUser(this.loginForm.value).subscribe(data => {
+        //           console.log('======7777777=======', data);
+        //           if (data.status === 200) {
+        //             this.globalService.hideLoading();
+        //             this.routerService.navigateTo('timeline');
+        //           } else {
+        //             this.globalService.hideLoading();
+        //             if (data.message.code === 'auth/user-not-found') {
+        //               this.errorMsg = 'This user does not exist. Please create an account';
+        //               this.ref.detectChanges();
+        //             } else if (data.message.code === 'auth/wrong-password') {
+        //               this.errorMsg = 'This password is wrong';
+        //               this.ref.detectChanges();
+        //             } else {
+        //               this.errorMsg = data.message;
+        //               this.ref.detectChanges();
+        //             }
+        //           }
+        //         }, error => {
+        //           console.error('error', error);
+        //           this.globalService.hideLoading();
+        //           console.log('There are some error in fetching user Info');
+        //         })
+        //       );
+        //     } else {
+        //       this.globalService.hideLoading();
+        //       this.errorMsg = 'This user does not exist. Please create an account';
+        //       this.ref.detectChanges();
+        //     }
+        //   })
+        // );
       }
     } else  {
       this.errorMsg = 'All fields are required';

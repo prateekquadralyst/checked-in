@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 /* eslint-disable no-underscore-dangle */
 import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -11,6 +12,7 @@ import * as firebase from 'firebase/compat/app';
 import  'firebase/auth';
 
 export interface UserPro{
+  id: any;
   username: string;
   uid: string;
 }
@@ -37,11 +39,12 @@ export class UserService {
   userProviderAdditionalInfo: any;
   redirectResult: Subject<any> = new Subject<any>();
   userSubscriptions: Subscription;
-  currentUserDataSource = new BehaviorSubject(this.currentUser);
   userCollection: any;
   response: { status: number; message: string; data: any};
   action: string | null = null;
   actionTypeSource = new BehaviorSubject(this.action);
+  currentUserDataSource = new BehaviorSubject(this.currentUser);
+  currentUserInfo = this.currentUserDataSource.asObservable();
   private user: UserPro;
   private authenticationStatusSubject = new Subject<Observable<any>>();
   private tableName: string | null = null;
@@ -58,33 +61,20 @@ export class UserService {
   }
 
 
-  // checkAuth() {
-  //   firebase.default.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.setCurrentuserData(user.uid).subscribe(logedInInfo => {
-  //         console.log('((((((((@@@@@)))))))',logedInInfo);
-  //         this.currentUserDataSource.next(logedInInfo);
-  //       });
-  //       this.routerService.navigateTo('login');
-  //     }
-  //   });
-  // }
+  checkAuth() {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setCurrentuserData(user.uid).subscribe(logedInInfo => {
+          console.log('((((((((@@@@@)))))))',logedInInfo);
+          this.currentUser = logedInInfo;
+        });
+      }
+    });
+  }
 
   setProviderAdditionalInfo(additionalInfo: any) {
     this.userProviderAdditionalInfo = {...additionalInfo};
   }
-
-  // signUpWithEmail(user: any){
-  //   this.angularFireAuth.createUserWithEmailAndPassword(user.email, user.password).then( cred =>{
-  //     return this._afs.collection('info').doc(cred.user?.uid).set(
-  //       user,
-  //     );
-  //   })
-  //   .catch(error=>{
-  //     console.log("Something went wrong");
-  //   });
-  //   console.log(user.email);
-  // }
 
   public updateUser(id, data): Observable<any> {
     const obs = new Observable((observer) => {
@@ -140,7 +130,7 @@ export class UserService {
       map(changes => changes.map((doc: any) => {
         const data = doc.payload.doc.data();
         const id = doc.payload.doc.id;
-        console.log(data);
+        // console.log(data);
           // eslint-disable-next-line @typescript-eslint/ban-types
           return { id, ...data as {} };
         })),
@@ -254,10 +244,18 @@ export class UserService {
     return obj;
   }
 
-  getUser(){
-    const userData = localStorage.getItem('user');
-    console.log('******===========******',userData);
-    return JSON.parse(userData);
+  getCurrentUser(): Promise<string> {
+    const promise = new Promise<string>((resolve, reject) => {
+      this.angularFireAuth.onAuthStateChanged(returnedUser => {
+        if (returnedUser) {
+          resolve(returnedUser.uid);
+          this._afs.collection("Users").doc(returnedUser.uid).valueChanges();
+        } else {
+          reject(null);
+        }
+      });
+    });
+    return promise;
   }
 
   logout(){
@@ -270,26 +268,25 @@ export class UserService {
 
   //=====================================uploading======================================//
 
-  uploadFile(file: any, user: any): Observable<any> {
-    const filePath = `${file.name}`;
-    const storageRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, file);
-    const obs = new Observable((observer) => {
-      uploadTask.snapshotChanges().pipe(
-      finalize(() => {
-         storageRef.getDownloadURL().subscribe(downloadURL => {
-          console.log('downloadURL----------', downloadURL);
-          this.updateUserPhoto(user,downloadURL );
-          file.url = downloadURL;
-          // file.name = file.file.name;
-          observer.next({
-            url : downloadURL
-          });
-        });
-      })
-      ).subscribe();
+  async uploadFile(profilePhoto: string, id: string){
+    const user = firebase.default.auth().currentUser;
+    console.log('-----------user----------', user);
+    const selfieRef = await firebase.default.storage().ref(`profilePhotos/${user.uid}/profilePhoto.jpeg`);
+    console.log('=======selfieRef=========', selfieRef);
+    return selfieRef.putString(profilePhoto, 'base64', { contentType: 'image/jpeg' }).then(async savedProfilePhoto => {
+      console.log('=======savedProfilePhoto=========', savedProfilePhoto);
+      const percentage = (savedProfilePhoto.bytesTransferred / savedProfilePhoto.totalBytes) * 100;
+      return savedProfilePhoto.task.snapshot.ref.getDownloadURL().then(async downloadURL =>
+         this._afs.collection('Users').doc(id)
+          .update({ photo: downloadURL }).then(() => {
+            const data = {
+              downloadURLs: downloadURL,
+              percentages: percentage
+            };
+            return data;
+          }, error => error.message)
+      );
     });
-    return obs;
   }
   public updateUserPhoto(user: any, downloadURL: any){
     const updateData =  {
@@ -299,3 +296,4 @@ export class UserService {
   }
 
 }
+

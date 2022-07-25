@@ -4,20 +4,13 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { VerifiPhoneNumberComponent } from './verifi-phone-number/verifi-phone-number.component';
+import { MenuComponent} from './menu/menu.component';
 
 
 
-// const SHARED_COMPONENTS = [
-//   RewardsComponent,
-//   SocialMediaComponent,
-//   LoginWithFacebookComponent,
-//   LoginWithGoogleComponent,
-//   HeaderComponent,
-//   TicketsComponent,
-//   PlayersComponent,
-//   WinnersComponent,
-//   TicketNumbersComponent,
-// ];
+const SHARED_COMPONENTS = [
+  MenuComponent
+];
 @NgModule({
   imports: [
     CommonModule,
@@ -28,20 +21,9 @@ import { VerifiPhoneNumberComponent } from './verifi-phone-number/verifi-phone-n
   ],
   declarations: [
     VerifiPhoneNumberComponent,
+    SHARED_COMPONENTS
   ],
-  // exports: SHARED_COMPONENTS,
-  // entryComponents: [
-  //   AddRewardComponent,
-  //   IssueTicketsComponent,
-  //   TicketExpandComponent,
-  //   EditProfileComponent,
-  //   RewardWinnerDetailComponent,
-  //   OrgGameInfoComponent,
-  //   VerifiPhoneNumberComponent,
-  //   AppStarRateComponent,
-  //   AppRateComponent
-
-  // ],
+  exports: SHARED_COMPONENTS,
   providers: [],
 })
 export class SharedUiComponentModule { }

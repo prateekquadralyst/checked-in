@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationService } from './services/navigation.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -6,13 +7,19 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
+    { title: 'timeline', url: 'timeline', icon: 'alarm' },
+    { title: 'Profile', url: 'profile', icon: 'person' },
     { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
     { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
     { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  constructor(
+    private navigationService: NavigationService,
+  ) {}
+
+  public navigateTo(url: string): void{
+    this.navigationService.navigateTo(url);
+  }
 }
