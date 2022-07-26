@@ -13,6 +13,13 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/compat/app';
 import  'firebase/auth';
+import cityjson from './files/city.json';
+
+interface CITY {
+  id: number;
+  name: string;
+  state: string;
+};
 
 @Component({
   selector: 'app-profile',
@@ -33,12 +40,13 @@ export class ProfilePage implements OnInit{
   public photo: string | null;
   subscriptions: Subscription[] = [];
   actionTypeSource = new BehaviorSubject(this.action);
+  citys: any= cityjson;
 
   public profileForm = new FormGroup({
-    name: new FormControl(''),
-    email: new FormControl(''),
     address: new FormControl(''),
-    phone: new FormControl(''),
+    city: new FormControl(''),
+    state: new FormControl(''),
+    userType: new FormControl(''),
   });
 
   constructor(
@@ -51,17 +59,47 @@ export class ProfilePage implements OnInit{
     private fb: FormBuilder,
   ) {
     this.checkAuth();
+    console.log('=========City========',this.citys);
   }
 
   ngOnInit(): void {
-    if(this.currentUser){
+
       this.profileForm = this.fb.group({
-        name : [ this.currentUser ? this.currentUser.name : '',Validators.required],
-        email : [this.currentUser ? this.currentUser.email : '',Validators.required],
-        address : [this.currentUser ? this.currentUser.address : '',Validators.required],
-        phone : [this.currentUser ? this.currentUser.phone : '',Validators.required],
+        address : [ this.currentUser ? this.currentUser.address : '',Validators.required],
+        city : [this.currentUser ? this.currentUser.city : '',Validators.required],
+        state : [this.currentUser ? this.currentUser.state : '',Validators.required],
+        userType : [this.currentUser ? this.currentUser.userType : '',Validators.required],
       });
-    }
+
+  }
+
+  async selectImage() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Please Select Option',
+      mode: 'ios',
+      buttons: [{
+        text: 'Gallery',
+        icon: 'image',
+        handler: () => {
+          console.log('Click Gallery');
+          this.takePicture('gallery');
+        }
+      },
+      {
+        text: 'Camera',
+        icon: 'camera',
+        handler: () => {
+          console.log('Click Camera');
+        }
+      },
+      {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel'
+      }
+      ]
+    });
+    await actionSheet.present();
   }
 
     takePicture = async (type: string) => {
@@ -84,21 +122,16 @@ export class ProfilePage implements OnInit{
     await Camera.getPhoto(comeraOptions).then(async profilePhoto => {
       const docId = this.currentUser.id;
       console.log('(((((((+++++++++++++++++++))))))))))', this.currentUser.id);
-      this.uploadpercentage = 0.5;
+      this.globalService.showLoading(true);
       this.userService.uploadFile(profilePhoto.base64String, docId).then(data => {
         this.userProfilePhoto = data.downloadURLs;
-        this.uploadpercentage = data.percentages;
         this.responseMsg = 'Profile photo changed successfully.';
         this.globalService.showToastMessage(this.responseMsg);
-        setTimeout(() => {
-          this.loading = false;
-          this.uploadpercentage = null;
+        this.globalService.hideLoading();
 
-        }, 3000);
       }, error => {
         console.log('error', error);
         this.loading = false;
-        this.uploadpercentage = null;
         this.responseMsg = 'There are some error to profile photo changed.';
         this.globalService.showToastMessage(this.responseMsg);
         console.log('ERROR -> ' + JSON.stringify(error));
@@ -107,55 +140,13 @@ export class ProfilePage implements OnInit{
   };
 
 
-   // pickImage(sourceType) {
-  //   const options: CameraOptions = {
-  //     quality: 100,
-  //     sourceType: sourceType,
-  //     destinationType: this.camera.DestinationType.DATA_URL,
-  //     encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.PICTURE
-  //   };
-  //   this.camera.getPicture(options).then((imageData) => {
-  //     this.croppedImagepath = 'data:image/jpeg;base64,' + imageData;
-  //   }, (err) => {
-  //   });
-  // }
-
-
-  async selectImage() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Please Select Option',
-      mode: 'ios',
-      buttons: [{
-        text: 'Gallery',
-        icon: 'image',
-        handler: () => {
-          this.takePicture('gallery');
-        }
-      },
-      // {
-      //   text: 'Use Camera',
-      //   handler: () => {
-      //   }
-      // },
-      {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel'
-      }
-      ]
-    });
-    await actionSheet.present();
-  }
-
-
   async logout(): Promise<void>{
-    alert('+====================');
+    // alert('+====================');
     await this.userService.logout();
     this.globalService.showLoading(true);
     setTimeout(() => {
       this.globalService.hideLoading();
-    }, 2000);
+    }, 1500);
     if(this.logout){
       this.navigationService.navigateTo('login');
       console.log('Logout Successfull');
@@ -165,14 +156,21 @@ export class ProfilePage implements OnInit{
   }
 
   checkAuth() {
+    this.globalService.showLoading(true);
     firebase.default.auth().onAuthStateChanged(user => {
       if (user) {
         this.userService.setCurrentuserData(user.uid).subscribe(logedInInfo => {
           // console.log('((((((((@@@@@)))))))',logedInInfo);
           this.currentUser= logedInInfo;
-          console.log('((((((((&&&&&&&&&&&&&&&&&&&&&&&&&)))))))', this.currentUser);
+          this.profileImage = this.currentUser.photo !== '' ? this.currentUser.photo : '../../assets/avatar.png';
+          this.globalService.hideLoading();
+          // console.log('((((((((&&&&&&&&&&&&&&&&&&&&&&&&&)))))))', this.currentUser);
         });
       }
     });
+  }
+
+  public sendData(){
+    console.log('==========@@@@@@@=========',this.profileForm.value);
   }
 }

@@ -49,17 +49,28 @@ export class UserService {
   private authenticationStatusSubject = new Subject<Observable<any>>();
   private tableName: string | null = null;
 
+  // const name = new String("Hello World");
+
+
   constructor(
     public _afs: AngularFirestore,
     public angularFireAuth: AngularFireAuth,
     public _ngZone: NgZone,
     public routerService: NavigationService,
     private storage: AngularFireStorage
-  ) {
-    // this.checkAuth();
+    ) {
+      // this.checkAuth();
     this.userCollection = this._afs.collection<User>('Users');
+    this.wordCounter2();
   }
 
+  wordCounter2(){
+    const arr = ['#userType#','#userName#'];
+    let msg = 'Hello #userType# #userType#';
+      msg = msg.replace(/#userType#/g, 'abcdefghijklmnopqrstuvwxy');
+    console.log(msg.length);
+
+  }
 
   checkAuth() {
     firebase.default.auth().onAuthStateChanged(user => {
@@ -193,6 +204,7 @@ export class UserService {
       language: UserData.language,
       createdAt: 'Indore',
       createdBy: 'Prateek Shukla',
+      photo: '',
       verifyPhoneNumber: false,
       };
 

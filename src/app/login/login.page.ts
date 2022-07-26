@@ -132,8 +132,8 @@ export class LoginPage {
           this.authService.loginUser(this.onLoginForm.value).subscribe(data => {
             this.onLoginForm.reset();
             console.log('((((((88888888))))))))',data);
-            this.globalService.hideLoading();
             if (data.status === 200) {
+              this.globalService.hideLoading();
               this.routerService.navigateTo('profile');
             } else {
               // console.log('data.message.code', data.message.code)
