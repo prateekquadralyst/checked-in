@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TimelinePageRoutingModule } from './timeline-routing.module';
 
 import { TimelinePage } from './timeline.page';
+import { IonCollapseHeaderModule} from 'ion-collapse-header';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TimelinePageRoutingModule
+    TimelinePageRoutingModule,
+    IonCollapseHeaderModule
   ],
   declarations: [TimelinePage]
 })

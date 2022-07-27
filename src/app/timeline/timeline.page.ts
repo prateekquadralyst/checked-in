@@ -4,6 +4,8 @@ import { NavigationService } from '../services/navigation.service';
 import { GlobalService } from '../services/global.service';
 import { UserService } from '../api-services/user.service';
 import { runInThisContext } from 'vm';
+import * as firebase from 'firebase/compat/app';
+import  'firebase/auth';
 
 @Component({
   selector: 'app-timeline',
@@ -11,13 +13,17 @@ import { runInThisContext } from 'vm';
   styleUrls: ['./timeline.page.scss'],
 })
 export class TimelinePage implements OnInit {
+  currentUser: any;
+  profileImage: any;
 
   constructor(
     private profileService: ProfileService,
     private navigationService: NavigationService,
     private globalService: GlobalService,
     private userService: UserService
-  ) { }
+  ) {
+    this.checkAuth();
+  }
 
   ngOnInit() {
   }
@@ -35,6 +41,20 @@ export class TimelinePage implements OnInit {
     } else {
       console.log('Logout unsuccessfull*************');
     }
+  }
+  checkAuth() {
+    this.globalService.showLoading(true);
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.userService.setCurrentuserData(user.uid).subscribe(logedInInfo => {
+          // console.log('((((((((@@@@@)))))))',logedInInfo);
+          this.currentUser= logedInInfo;
+          this.profileImage = this.currentUser.photo !== '' ? this.currentUser.photo : '../../assets/avatar.png';
+          this.globalService.hideLoading();
+          console.log('((((((((&&&&&&&&&&&&&&&&&&&&&&&&&)))))))', this.currentUser);
+        });
+      }
+    });
   }
 
 }

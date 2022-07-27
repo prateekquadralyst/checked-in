@@ -1,12 +1,14 @@
-
+<ion-header #header>
 <ion-toolbar>
   <ion-buttons slot="start">
     <ion-menu-button></ion-menu-button>
   </ion-buttons>
 </ion-toolbar>
+</ion-header>
+
 <ion-item>
   <ion-thumbnail slot="start">
-    <img class="profilepic" src="../../assets/11.jpeg" />
+    <img *ngIf="profileImage" class="propic" src="{{profileImage}}" />
   </ion-thumbnail>
   <ion-label>
     <ion-searchbar showCancelButton="never"></ion-searchbar>
@@ -19,41 +21,7 @@
 </ion-item>
 
 
-<!-- <ion-content>
-  <ion-infinite-scroll>
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more data…">
-      <ion-card class="feeds">
-        <ion-card-header>
-          <ion-thumbnail class="ion-margin-start">
-            <img class="feedspic" src="../../assets/22.jpeg" />
-          </ion-thumbnail>
-          <ion-card-title>Card Title</ion-card-title>
-        </ion-card-header>
-      
-        <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="feeds">
-        <ion-card-header>
-          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-          <ion-card-title>Card Title</ion-card-title>
-        </ion-card-header>
-      
-        <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-      </ion-card>
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content> -->
-
-<!-- <ion-button class="sign-up-btn" type="submit" (click)="logout()" expand="block" >Logout</ion-button> -->
-<ion-content>
+<ion-content collapse-header [header]="header" [scrollEvents]=true>
   <div class="post-list">
     <div class="post-item">
       <div class="post-media">
@@ -434,8 +402,22 @@
       </div>
     </div>
   </div>
-
-</ion-content>
+<ion-fab horizontal="end" vertical="bottom" slot="fixed">
+  <ion-fab-button color="primary" class="">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button color="primary" routerDirection="forward" data-desc="Create Contact">
+      <ion-icon name="person-add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button color="primary" routerDirection="forward" data-desc="Create Reminder">
+      <ion-icon name="alarm"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button color="primary" routerDirection="forward" data-desc="Upload Post">
+      <ion-icon name="document-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
 
 
 

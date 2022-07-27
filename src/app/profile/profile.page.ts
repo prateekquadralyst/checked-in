@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/compat/app';
 import  'firebase/auth';
 import cityjson from './files/city.json';
+import { UserData } from 'src/providers/user-data';
 
 interface CITY {
   id: number;
@@ -38,16 +39,9 @@ export class ProfilePage implements OnInit{
   logedInInfo: any[] = [];
   photoAddStatus: boolean;
   public photo: string | null;
-  subscriptions: Subscription[] = [];
   actionTypeSource = new BehaviorSubject(this.action);
   citys: any= cityjson;
-
-  public profileForm = new FormGroup({
-    address: new FormControl(''),
-    city: new FormControl(''),
-    state: new FormControl(''),
-    userType: new FormControl(''),
-  });
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private actionSheetController: ActionSheetController,
@@ -64,12 +58,12 @@ export class ProfilePage implements OnInit{
 
   ngOnInit(): void {
 
-      this.profileForm = this.fb.group({
-        address : [ this.currentUser ? this.currentUser.address : '',Validators.required],
-        city : [this.currentUser ? this.currentUser.city : '',Validators.required],
-        state : [this.currentUser ? this.currentUser.state : '',Validators.required],
-        userType : [this.currentUser ? this.currentUser.userType : '',Validators.required],
-      });
+      // this.profileForm = this.fb.group({
+      //   address : [ this.currentUser ? this.currentUser.address : '',Validators.required],
+      //   city : [this.currentUser ? this.currentUser.city : '',Validators.required],
+      //   state : [this.currentUser ? this.currentUser.state : '',Validators.required],
+      //   userType : [this.currentUser ? this.currentUser.userType : '',Validators.required],
+      // });
 
   }
 
@@ -170,7 +164,7 @@ export class ProfilePage implements OnInit{
     });
   }
 
-  public sendData(){
+  public update(){
     console.log('==========@@@@@@@=========',this.profileForm.value);
   }
 }

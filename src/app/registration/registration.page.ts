@@ -8,6 +8,7 @@ import { GlobalService } from '../services/global.service';
 import { VerifiPhoneNumberComponent } from '../shared-ui-component/verifi-phone-number/verifi-phone-number.component';
 import { ModalController} from '@ionic/angular';
 import country from './files/CountryCodes.json';
+import city from './files/city.json';
 
 @Component({
   selector: 'app-registration',
@@ -30,6 +31,7 @@ export class RegistrationPage {
   public checkPhoneStatus = false;
   public submitted = false;
   selectedLanguage = 'en';
+  citys: any = city;
 
   signUpForm: FormGroup;
   submitError: string;
@@ -55,7 +57,16 @@ export class RegistrationPage {
       { type: 'required', message: 'Number is required.' },
       { type: 'minlength', message: 'Number must be at least 10 characters long.' },
       // { type: 'maxlength', message: 'Number must be 12 characters long.' }
-    ]
+    ],
+    address: [
+    { type: 'required', message: 'address is required.' },
+    ],
+    city: [
+    { type: 'required', message: 'city is required.' },
+    ],
+    state: [
+    { type: 'required', message: 'state is required.' },
+    ],
   };
   private subscriptions: Subscription[] = [];
 
@@ -72,7 +83,10 @@ export class RegistrationPage {
       password: new FormControl('', Validators.compose([Validators.minLength(6),Validators.required
       ])),
       phone: new FormControl('', Validators.compose([Validators.minLength(10),Validators.maxLength(12),Validators.required
-      ]))
+      ])),
+      address: new FormControl('', Validators.compose([Validators.required])),
+      city: new FormControl('', Validators.compose([Validators.required])),
+      state: new FormControl('', Validators.compose([Validators.required])),
     });
   }
 
@@ -84,6 +98,7 @@ export class RegistrationPage {
 
 
   public signUpWithEmail(): void {
+    console.log(this.signUpForm.value);
     this.signUpForm.value.phoneNumber = this.register.phoneNumber;
     this.signUpForm.value.language = this.selectedLanguage;
     this.subscriptions.push(

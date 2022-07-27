@@ -129,9 +129,56 @@
             </div>
           </ng-container>
         </div>
-      </ion-list>
+
+        <ion-item no-padding class="animated fadeInUp">
+          <ion-label position="floating">
+            <ion-icon name="compass-outline"></ion-icon>
+            Address
+          </ion-label>
+          <ion-input color="secondary" type="text" formControlName="address" [required]="true"></ion-input>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.address">
+            <div class="error-message" *ngIf="signUpForm.get('address').hasError(validation.type) && (signUpForm.get('address').dirty || signUpForm.get('address').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <ion-item>
+          <ion-label color="dark">City</ion-label>
+          <ion-select formControlName="city">
+            <ion-select-option *ngFor="let city of citys">{{city.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.city">
+            <div class="error-message" *ngIf="signUpForm.get('city').hasError(validation.type) && (signUpForm.get('city').dirty || signUpForm.get('city').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
   
-      <ion-button class="sign-up-btn" type="submit" expand="block" [disabled]="signUpForm.invalid" >Sign Up</ion-button>
+        <ion-item>
+          <ion-label color="dark" >State</ion-label>
+          <ion-select formControlName="state">
+            <ion-select-option *ngFor="let city of citys">{{city.state}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="error-container">
+          <ng-container *ngFor="let validation of validation_messages.state">
+            <div class="error-message" *ngIf="signUpForm.get('state').hasError(validation.type) && (signUpForm.get('state').dirty || signUpForm.get('state').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>{{ validation.message }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </ion-list>
+
+  
+      <ion-button class="sign-up-btn" type="submit" expand="block" >Sign Up</ion-button>
       <div class="error-container">
         <!-- <div class="error-message">
           <ion-icon name="information-circle-outline"></ion-icon>
