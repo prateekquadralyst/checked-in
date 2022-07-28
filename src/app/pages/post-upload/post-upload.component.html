@@ -1,0 +1,69 @@
+
+    <ion-content class="ion-no-padding">
+      <div class="heading ion-padding">
+        <ion-button class="ion-no-padding" size="small" (click)="backTo()" color="dark" fill="clear" shape="round">
+          <ion-icon slot="icon-only" size="large" name="close-outline"></ion-icon>
+        </ion-button>
+        <ion-text>Share Post</ion-text>
+        <ion-router-link class="post" color="secondary">Post</ion-router-link>
+      </div>
+      <div class="item-divider"></div>
+      <ion-grid class="ion-padding">
+        <ion-row class="ion-justify-content-start">
+          <ion-col size="auto">
+            <ion-avatar>
+              <ion-img src="../../../assets/11.jpeg"
+              ></ion-img>
+            </ion-avatar>
+          </ion-col>
+          <ion-col>
+            <div>
+              <ion-text>hfgh</ion-text>
+            </div>
+            <ion-button class="ion-no-padding" size="small" shape="round" fill="outline" color="medium">
+              <ion-icon color="dark" name="globe"></ion-icon>
+              <ion-text class="view-status">Anyone</ion-text>
+              <ion-icon color="dark" name="caret-down-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <form class="ion-padding">
+        <ion-textarea
+          id="theDiv"
+          placeholder="What do you want to talk about?"
+          type="text"
+          ngModel
+          name="body"
+          required
+        >
+        </ion-textarea>
+        <ion-button fill="clear" id='theButton'>Add hashtag</ion-button>
+        <div class="ion-no-padding">
+          <div>
+            <ion-button size="small" shape="round" color="dark" fill="clear">
+              <ion-icon
+                class="ion-padding-none"
+                slot="icon-only"
+                name="camera"
+              ></ion-icon>
+            </ion-button>
+            <ion-button size="small" shape="round" color="dark" fill="clear">
+              <ion-icon
+                class="ion-padding-none"
+                slot="icon-only"
+                name="at"
+              ></ion-icon>
+            </ion-button>
+            <ion-button size="small" shape="round" color="dark" fill="clear">
+              <ion-icon
+                class="ion-padding-none"
+                slot="icon-only"
+                name="grid"
+              ></ion-icon>
+            </ion-button>
+          </div>
+          <!-- <ion-button type="submit" class="ion-margin">{{ postId ? 'Edit' : 'Post' }}</ion-button> -->
+        </div>
+      </form>
+</ion-content>
