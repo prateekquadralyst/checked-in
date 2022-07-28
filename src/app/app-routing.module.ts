@@ -32,12 +32,12 @@ const routes: Routes = [
     loadChildren: () => import('./timeline/timeline.module').then( m => m.TimelinePageModule)
   },
   {
-    path: 'tablinks',
-    loadChildren: () => import('./tablinks/tablinks.module').then( m => m.TablinksPageModule)
-  },
-  {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'pages',
+    loadChildren: () => import('./pages/pages.module').then( m => m.PagesPageModule)
   },
 ];
 

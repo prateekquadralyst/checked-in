@@ -43,6 +43,7 @@ export class ProfilePage implements OnInit{
   citys: any= cityjson;
   private subscriptions: Subscription[] = [];
 
+
   constructor(
     private actionSheetController: ActionSheetController,
     private userService: UserService,
@@ -53,7 +54,16 @@ export class ProfilePage implements OnInit{
     private fb: FormBuilder,
   ) {
     this.checkAuth();
-    console.log('=========City========',this.citys);
+    let userObj = {
+      name: "Sammy",
+      email: "sammy@example.com",
+      plan: "Pro"
+    };
+  
+let userStr = JSON.stringify(userObj);
+
+console.log(userStr);
+    
   }
 
   ngOnInit(): void {
@@ -168,3 +178,4 @@ export class ProfilePage implements OnInit{
     console.log('==========@@@@@@@=========',this.profileForm.value);
   }
 }
+

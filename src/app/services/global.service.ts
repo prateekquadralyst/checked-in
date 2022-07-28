@@ -28,7 +28,7 @@ export class GlobalService {
       this.lodingStatus = val;
       this.hideloadingTime.subscribe(async loadTime => {
         this.submitLoading = await this.loadingController.create({
-          spinner: 'lines',
+          spinner: 'bubbles',
           duration: loadTime,
           message: 'Please wait...',
           translucent: true,

@@ -413,7 +413,7 @@
     <ion-fab-button color="primary" routerDirection="forward" data-desc="Create Reminder">
       <ion-icon name="alarm"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button color="primary" routerDirection="forward" data-desc="Upload Post">
+    <ion-fab-button color="primary" (click)="navigateTo('/pages/post-upload')" routerDirection="forward" data-desc="Upload Post">
       <ion-icon name="document-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab-list>

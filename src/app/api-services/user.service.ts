@@ -40,6 +40,7 @@ export class UserService {
   redirectResult: Subject<any> = new Subject<any>();
   userSubscriptions: Subscription;
   userCollection: any;
+  testing: any;
   response: { status: number; message: string; data: any};
   action: string | null = null;
   actionTypeSource = new BehaviorSubject(this.action);
@@ -48,6 +49,7 @@ export class UserService {
   private user: UserPro;
   private authenticationStatusSubject = new Subject<Observable<any>>();
   private tableName: string | null = null;
+  data: any;
 
   // const name = new String("Hello World");
 
@@ -61,6 +63,7 @@ export class UserService {
     ) {
       // this.checkAuth();
     this.userCollection = this._afs.collection<User>('Users');
+    this.testing = this._afs.collection<User>('Test');
     this.wordCounter2();
   }
 
@@ -184,6 +187,18 @@ export class UserService {
       });
     });
     return obj;
+  }
+
+  public sendData(value){
+    this.data = value;
+    this.testing.doc().set(value).then(async () =>{
+      this.response = {
+        status: 200,
+        message: 'successfuly.',
+        data: null
+      };
+    })
+    return of(this.response);
   }
 
   // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -56,5 +56,8 @@ export class TimelinePage implements OnInit {
       }
     });
   }
+  public navigateTo(url: string): void {
+    this.navigationService.navigateTo(url);
+  }
 
 }

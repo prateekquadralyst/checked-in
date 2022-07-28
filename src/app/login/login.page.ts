@@ -119,7 +119,7 @@ export class LoginPage {
   }
 
   public login(url: string): void {
-    alert('===============');
+    // alert('===============');
     console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',this.onLoginForm.value);
     this.errorMsg = '';
     this.submitted = true;

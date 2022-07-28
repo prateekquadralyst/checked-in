@@ -15,7 +15,7 @@ import city from './files/city.json';
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
 })
-export class RegistrationPage {
+export class RegistrationPage{
   // eslint-disable-next-line @typescript-eslint/quotes
   pwdIcon = "eye-outline";
   showPwd = false;
@@ -38,6 +38,7 @@ export class RegistrationPage {
   authRedirectResult: Subscription;
   alert=false;
   showPassword = false;
+  
 
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -69,6 +70,47 @@ export class RegistrationPage {
     ],
   };
   private subscriptions: Subscription[] = [];
+  userObj: any;
+  products: any = [];
+
+   user = [
+    {
+      "statusCode":200,
+      "body":"9236166",
+      "headers":{
+         "cache-control":"private",
+         "content-type":"text/html",
+         "server":"Microsoft-IIS/8.5",
+         "set-cookie":[
+            "ASPSESSIONIDQWQQASBR=OKNFPKOACBGADALICJHKDELN; secure; path=/"
+         ],
+         "x-powered-by":"ASP.NET",
+         "date":"Thu, 28 Jul 2022 09:42:39 GMT",
+         "connection":"close",
+         "content-length":"7"
+      },
+      "request":{
+         "uri":{
+            "protocol":"https:",
+            "slashes":true,
+            "auth":null,
+            "host":"sms.tivre.com",
+            "port":443,
+            "hostname":"sms.tivre.com",
+            "hash":null,
+            "search":"?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
+            "query":"userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
+            "pathname":"/httppush/send_smsSch.asp",
+            "path":"/httppush/send_smsSch.asp?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
+            "href":"https://sms.tivre.com/httppush/send_smsSch.asp?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1"
+         },
+         "method":"GET",
+         "headers":{
+         }
+      }
+   }
+  ]
+  newOobj: any = [];
 
   constructor(
     private routerService: NavigationService,
@@ -88,6 +130,8 @@ export class RegistrationPage {
       city: new FormControl('', Validators.compose([Validators.required])),
       state: new FormControl('', Validators.compose([Validators.required])),
     });
+   
+    
   }
 
   togglePwd() {
@@ -118,6 +162,18 @@ export class RegistrationPage {
     );
   }
 
+  public sendData(): void {
+    this.user;
+    console.log(this.user);
+    // this.authService.sendData(this.user)
+    this.newOobj = Object.setPrototypeOf(this.user, Object.prototype); 
+    console.log(this.newOobj);
+     this.authService.sendData(this.newOobj);
+  }
+
+
+
+
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   redirectLoggedUserToProfilePage() {
@@ -128,6 +184,7 @@ export class RegistrationPage {
   public navigateTo(url: string): void{
     this.routerService.navigateTo(url);
   }
+
 
 
 }
