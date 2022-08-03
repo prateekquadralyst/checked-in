@@ -1,4 +1,4 @@
-
+<app-tabs></app-tabs>
     <ion-content class="ion-no-padding" >
       <div class="heading ion-padding">
         <ion-button class="ion-no-padding" size="small" (click)="navigateTo('timeline')" color="dark" fill="clear" shape="round">
@@ -38,13 +38,25 @@
           name="body"
           required
         >
+        <div class="col form-group" *ngIf="isImageSaved">
+          <div class="img-space">
+            <ng-container>
+              <img [src]="selectedPhoto"/>
+            </ng-container>
+          </div>
+          <p *ngIf="imageError" class="error">{{imageError}}</p>
+        </div>
         </ion-textarea>
         <ion-button fill="clear" id='theButton'>Add hashtag</ion-button>
         <div class="ion-no-padding">
           <div>
-            <ion-button size="small" shape="round" color="dark" fill="clear" type="file" (click)="selectImage($event)">
-              <i class="fa-solid fa-camera fa-2x"></i>
+            <ion-button size="small" shape="round" color="dark" fill="clear">
+              <i class="fa-solid fa-camera fa-2x" (click)="f.click()"></i>
             </ion-button>
+            <input class="ion-hide" #f type="file" (change)="selectImages($event)" id="file-input"
+              accept="image/png, image/jpeg">
+
+
             <ion-button size="small" shape="round" color="dark" fill="clear">
               <i class="fa-solid fa-at fa-2x"></i>
             </ion-button>

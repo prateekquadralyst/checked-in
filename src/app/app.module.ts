@@ -14,9 +14,11 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SharedUiComponentModule } from './shared-ui-component/shared-ui-component.module';
+import { HeaderDirective } from './header.directive';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HeaderDirective],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
     BrowserModule,
@@ -30,6 +32,7 @@ import { AppRoutingModule } from './app-routing.module';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     ToastrModule.forRoot(),
+    SharedUiComponentModule
   ],
   providers: [
     NativePageTransitions,

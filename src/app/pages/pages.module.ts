@@ -8,6 +8,8 @@ import { PagesPageRoutingModule } from './pages-routing.module';
 
 import { PagesPage } from './pages.page';
 import { PostUploadComponent } from './post-upload/post-upload.component';
+import { MessageComponent } from './message/message.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,11 @@ import { PostUploadComponent } from './post-upload/post-upload.component';
     ReactiveFormsModule,
     PagesPageRoutingModule,
   ],
-  declarations: [PagesPage, PostUploadComponent]
+  declarations: [
+    PagesPage,
+    PostUploadComponent,
+    MessageComponent,
+    ChatComponent
+  ]
 })
 export class PagesPageModule {}

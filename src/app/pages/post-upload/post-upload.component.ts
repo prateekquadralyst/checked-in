@@ -3,6 +3,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/api-services/user.service';
 import { ActionSheetController } from '@ionic/angular';
 import { GlobalService } from 'src/app/services/global.service';
+import * as _ from 'lodash';
 import { Camera, CameraDirection, CameraOptions, CameraResultType, CameraSource} from '@capacitor/camera';
 import * as firebase from 'firebase/compat/app';
 import 'firebase/auth'
@@ -18,6 +19,10 @@ export class PostUploadComponent implements OnInit {
   userProfilePhoto: any;
   responseMsg: string;
   loading = false
+  public imageError: string | null = null;
+  public imageLoading = false;
+  public selectedPhoto = '';
+  public isImageSaved: boolean;
 
   constructor(
     private routerService: NavigationService,
@@ -49,7 +54,6 @@ export class PostUploadComponent implements OnInit {
         icon: 'image',
         handler: () => {
           console.log('Click Gallery');
-          this.takePicture('gallery');
         }
       },
       {
@@ -69,43 +73,46 @@ export class PostUploadComponent implements OnInit {
     await actionSheet.present();
   }
 
-    takePicture = async (type: string) => {
-      const comeraOptions: CameraOptions = {
-        allowEditing: false,
-        correctOrientation: true,
-        direction: CameraDirection.Front,
-        quality: 95,
-        resultType: CameraResultType.Base64,
-        source: null,
-        saveToGallery: true
+
+
+  public selectImages(fileInput: any) {
+    this.imageLoading = true;
+    this.imageError = null;
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      const maxSize = 20971520;
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpeg'];
+      const maxHeight = 15200;
+      const maxWidth = 25600;
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const image = new Image();
+        image.src = e.target.result;
+        image.onload = rs => {
+          const imgHeight = rs.currentTarget['height'];
+          const imgWidth = rs.currentTarget['width'];
+
+
+          if (imgWidth > maxHeight && imgWidth > maxWidth) {
+            this.imageError =
+              'Maximum dimentions allowed ' +
+              imgHeight +
+              '*' +
+              maxWidth +
+              'px';
+            return false;
+          } else {
+            const imgBase64Path = e.target.result;
+            this.selectedPhoto = imgBase64Path;
+            this.imageLoading = false;
+            this.isImageSaved = true;
+          }
+        };
       };
-
-    if (type === 'camera') {
-      comeraOptions.source = CameraSource.Camera;
-    } else {
-      comeraOptions.source = CameraSource.Photos;
+      reader.readAsDataURL(fileInput.target.files[0]);
     }
-
-    await Camera.getPhoto(comeraOptions).then(async profilePhoto => {
-      const docId = this.currentUser.id;
-      console.log('((((((=======))))))', profilePhoto)
-      this.globalService.showLoading(true);
-      return;
-      this.userService.uploadFile(profilePhoto.base64String, docId).then(data => {
-        this.userProfilePhoto = data.downloadURLs;
-        this.responseMsg = 'Profile photo changed successfully.';
-        this.globalService.showToastMessage(this.responseMsg);
-        this.globalService.hideLoading();
-
-      }, error => {
-        console.log('error', error);
-        this.loading = false;
-        this.responseMsg = 'There are some error to profile photo changed.';
-        this.globalService.showToastMessage(this.responseMsg);
-        console.log('ERROR -> ' + JSON.stringify(error));
-      });
-    });
-  };
+  }
+  
 
   //==================================POST UPLOAD END=====================================//
 

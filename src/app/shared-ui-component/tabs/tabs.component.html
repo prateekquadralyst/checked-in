@@ -1,0 +1,39 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button (click)="navigateTo('timeline')">
+      <ion-icon name="home" class="ionicon"></ion-icon>
+      <div class="iontext">Home</div>
+    </ion-tab-button>
+    <ion-tab-button (click)="navigateTo('profile')">
+      <ion-icon name="people" class="ionicon"></ion-icon>
+      <div class="iontext">My Network</div>
+    </ion-tab-button>
+    <ion-tab-button (click)="navigateTo('/pages/post-upload')">
+      <ion-icon name="add-circle" class="ionicon"></ion-icon>
+      <div class="iontext">Post</div>
+    </ion-tab-button>
+    <ion-tab-button>
+      <ion-icon name="notifications" class="ionicon"></ion-icon>
+      <ion-badge
+        color="danger"
+        style="
+          position: absolute;
+          margin-left: -6px;
+          margin-top: -10px;
+          height: 16px;
+          width: 16px;
+          border-radius: 9999px;
+        "
+        ><ion-text
+          style="font-weight: 400; font-size: 12px; margin-left: -1px"
+          >2</ion-text
+        >
+      </ion-badge>
+      <div class="iontext">Notifications</div>
+    </ion-tab-button>
+    <ion-tab-button>
+      <ion-icon name="briefcase" class="ionicon"></ion-icon>
+      <div class="iontext">Jobs</div>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

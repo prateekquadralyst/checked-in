@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { NavigationService } from './services/navigation.service';
+import { UserService } from './api-services/user.service';
+import * as firebase from 'firebase/compat/app';
+import  'firebase/auth';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -15,9 +18,21 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  currentUser: any;
   constructor(
     private navigationService: NavigationService,
+    private userService: UserService
   ) {}
+
+  checkAuth() {
+    firebase.default.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.userService.setCurrentuserData(user.uid).subscribe(logedInInfo => {
+          this.currentUser = logedInInfo;
+        });
+      }
+    });
+  }
 
   public navigateTo(url: string): void{
     this.navigationService.navigateTo(url);

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PagesPage } from './pages.page';
 import { PostUploadComponent } from './post-upload/post-upload.component';
 import { MessageComponent } from './message/message.component';
-import { TabsComponent } from './tabs/tabs.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   {
@@ -20,9 +20,9 @@ const routes: Routes = [
         component: MessageComponent
       },
       {
-        path: 'tabs',
-        component: TabsComponent
-      }
+        path: 'chat',
+        component: ChatComponent
+      },
     ]
   }
 ];

@@ -5,13 +5,18 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { VerifiPhoneNumberComponent } from './verifi-phone-number/verifi-phone-number.component';
 import { MenuComponent} from './menu/menu.component';
+import { TabsComponent } from './tabs/tabs.component';
 
 
 
 const SHARED_COMPONENTS = [
-  MenuComponent
+  MenuComponent,
+  TabsComponent,
+  VerifiPhoneNumberComponent
 ];
 @NgModule({
+  declarations: [SHARED_COMPONENTS],
+  exports: SHARED_COMPONENTS,
   imports: [
     CommonModule,
     IonicModule,
@@ -19,11 +24,6 @@ const SHARED_COMPONENTS = [
     ReactiveFormsModule,
     TranslateModule.forChild(),
   ],
-  declarations: [
-    VerifiPhoneNumberComponent,
-    SHARED_COMPONENTS
-  ],
-  exports: SHARED_COMPONENTS,
   providers: [],
 })
 export class SharedUiComponentModule { }
