@@ -1,103 +1,38 @@
-// ion-header{
-//     margin-top: 30px;
-//     margin-bottom: 5%;
-// }
-// ion-content {
-//     padding: 8px;
-// }
-// ion-title{
-//     text-align: left;
-//     margin-left: 15px;
-//     -webkit-padding-start: 0;
-//     padding-inline-start: 0;
-//     font-size: 26px;
-//     margin-top: 5px;
-//     color: #0A66C2;
-//     font-weight: 940;
-// }
-// .in {
-//     background-color: #0A66C2;
-//     color: #fff;
-//     padding: 3px;
-//     border-radius: 20%;
-//     font-size: 26px;
-//     margin-left: 4px;
-//     font-weight: 800;
-// }
-// .signup {
-//     margin-top: 10px;
-//     font-size: 33px;
-//     margin-left: 20px;
-//     font-weight: 800;
-//     color: #fff;
-// }
-// section {
-//     margin-top: 1em;
-//     margin-bottom: 2.5em;
-//   }
+@import '~ngx-toastr/toastr';
 
-//   section:not(.full-width),
-//   .full-width > header {
-//     padding: 0 10px;
-//   }
-// .create {
-//     margin-top: 4%;
-//     margin-top: 4%;
-//     font-size: 22px;
-//     padding: 5px;
-//     font-weight: bolder;
-// }
-// .forgot {
-//     margin-bottom: 0px;
-//     margin-top: 30px;
-//     margin-left: 15px;
-//     color: #fff;
-// }
-// .log {
-//     border: 1px solid black;
-//     border-radius: 25px;
-//     font-size: 18px;
-//     margin-top: 14px;
-//     img {
-//         margin-right: 2px;
-//     }
-// }
-// :host(.button-full) .button-native {
-//     margin-left: 0px;
-//     margin-right: 0px;
-//     display: block;
-//     width: 100%;
-//     contain: content;
-//     background-color: #0036b5;
-// }
-// .checkbox-container {
-//     position: relative;      
-//  }
-// .box {
-//     text-align: left;
-//     margin-top: 10%;
-//     margin-left: 20px;
-//     font-size: 20px;
-//     font-weight: 800;
-// }
-// ion-checkbox{
-//     margin-right: 15px;
-// }
-// .join {
-//     float: right;
-//     margin-right: 15px;
-//     padding: 7px;
-//     font-family: system-ui;
-// }
-// .error {
-//     color: red;
-// }
-// :host {
-//   ion-content, ion-header, ion-item {
-//       --background: linear-gradient(300deg, var(--ion-color-dark), var(--ion-color-primary));
-//       color: #fff;
-//   }
-// }
+.toast {
+  visibility: visible;
+  min-width: 250px !important;
+  text-align: center;
+  padding: 16px;
+  z-index: 1;
+  font-size: 17px;
+  position: absolute;
+  left: 30px;
+  bottom: 30px;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 
 .or-separator {
   display: -webkit-box;

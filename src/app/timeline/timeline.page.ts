@@ -49,7 +49,7 @@ export class TimelinePage implements OnInit {
         this.userService.setCurrentuserData(user.uid).subscribe(logedInInfo => {
           // console.log('((((((((@@@@@)))))))',logedInInfo);
           this.currentUser= logedInInfo;
-          this.profileImage = this.currentUser.photo !== '' ? this.currentUser.photo : '../../assets/avatar.png';
+          this.profileImage = (!this.currentUser.photo || this.currentUser.photo === '') ? '../../assets/avatar.png' : this.currentUser.photo ;
           this.globalService.hideLoading();
           console.log('((((((((&&&&&&&&&&&&&&&&&&&&&&&&&)))))))', this.currentUser);
         });

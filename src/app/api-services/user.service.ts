@@ -300,11 +300,14 @@ export class UserService {
 
   async uploadFile(profilePhoto: string, id: string){
     const user = firebase.default.auth().currentUser;
-    console.log('-----------user----------', user);
+    // console.log('-----------user----------', user);
+
     const selfieRef = await firebase.default.storage().ref(`profilePhotos/${user.uid}/profilePhoto.jpeg`);
-    console.log('=======selfieRef=========', selfieRef);
+    // console.log('=======selfieRef=========', selfieRef);
+
     return selfieRef.putString(profilePhoto, 'base64', { contentType: 'image/jpeg' }).then(async savedProfilePhoto => {
-      console.log('=======savedProfilePhoto=========', savedProfilePhoto);
+      // console.log('=======savedProfilePhoto=========', savedProfilePhoto);
+
       const percentage = (savedProfilePhoto.bytesTransferred / savedProfilePhoto.totalBytes) * 100;
       return savedProfilePhoto.task.snapshot.ref.getDownloadURL().then(async downloadURL =>
          this._afs.collection('Users').doc(id)

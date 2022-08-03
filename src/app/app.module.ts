@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
 import { NativePageTransitions} from '@ionic-native/native-page-transitions/ngx';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -9,7 +8,9 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule} from '@ionic/angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
     AngularFireModule.initializeApp(environment.firebase),
     BrowserModule,
     IonicModule.forRoot(),
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
@@ -27,9 +29,10 @@ import { AppRoutingModule } from './app-routing.module';
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
-    NativePageTransitions
+    NativePageTransitions,
   ],
   bootstrap: [AppComponent],
 })

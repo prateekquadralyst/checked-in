@@ -55,9 +55,10 @@
       </p>
   
       <div>
-        <ion-button icon-left size="medium" type="submit" (click)="login()" [disabled]="!onLoginForm.valid" expand="block">
+        <ion-button icon-left size="medium" type="submit" (click)="login()" [disabled]="!onLoginForm.valid || loading" expand="block">
           <ion-icon name="log-in"></ion-icon>
-          Signin
+          <span class="loading" *ngIf="loading"> Please Wait..</span>
+          <span *ngIf="!loading">Sign In</span>
         </ion-button>
   
         <p class="signwith">

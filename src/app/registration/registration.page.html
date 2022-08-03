@@ -177,8 +177,11 @@
           </ng-container>
         </div>
   
-      <ion-button class="sign-up-btn" type="submit" expand="block" >Sign Up</ion-button>
-      <!-- <ion-button class="sign-up-btn" (click)="sendData()" expand="block" >Send Data</ion-button> -->
+      <ion-button class="sign-up-btn" type="submit" expand="block" [disabled]="!signUpForm.valid || loading" >
+        <span class="loading" *ngIf="loading"> Please Wait..</span>
+        <span *ngIf="!loading">Create Account</span>
+      </ion-button>
+      <!-- <ion-button class="sign-up-btn" (click)="newObj()" expand="block" >Send Data</ion-button> -->
       <div class="error-container">
         <!-- <div class="error-message">
           <ion-icon name="information-circle-outline"></ion-icon>

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { UserService } from '../api-services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class GlobalService {
     public loadingController: LoadingController,
     public toastController: ToastController,
     public userService: UserService,
+    public toster: ToastrService
   ) { }
 
   async showLoading(val) {
@@ -54,6 +56,16 @@ export class GlobalService {
       duration: 4000,
       position: 'top',
     });
+    toast.present();
+  }
+
+  async presentToast(msg:any) {
+    let toast = await this.toastController.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+  
     toast.present();
   }
 }

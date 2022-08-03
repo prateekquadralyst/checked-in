@@ -30,6 +30,7 @@ interface CITY {
 export class ProfilePage implements OnInit{
   [x: string]: any;
 
+  loading = false;
   currentUser: any;
   allInfo: any;
   imageElement: any;
@@ -152,6 +153,7 @@ console.log(userStr);
       this.globalService.hideLoading();
     }, 1500);
     if(this.logout){
+      this.loading = true;
       this.navigationService.navigateTo('login');
       console.log('Logout Successfull');
     } else {

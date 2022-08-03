@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../services/navigation.service';
+import { NotificationService } from '../services/notification.service';
 import { UserService } from '../api-services/user.service';
 import { GlobalService } from '../services/global.service';
 import { VerifiPhoneNumberComponent } from '../shared-ui-component/verifi-phone-number/verifi-phone-number.component';
@@ -19,6 +20,7 @@ export class RegistrationPage{
   // eslint-disable-next-line @typescript-eslint/quotes
   pwdIcon = "eye-outline";
   showPwd = false;
+  loading = false;
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   public errorMsg: string;
@@ -73,50 +75,25 @@ export class RegistrationPage{
   userObj: any;
   products: any = [];
 
-   user = [
-    {
-      "statusCode":200,
-      "body":"9236166",
-      "headers":{
-         "cache-control":"private",
-         "content-type":"text/html",
-         "server":"Microsoft-IIS/8.5",
-         "set-cookie":[
-            "ASPSESSIONIDQWQQASBR=OKNFPKOACBGADALICJHKDELN; secure; path=/"
-         ],
-         "x-powered-by":"ASP.NET",
-         "date":"Thu, 28 Jul 2022 09:42:39 GMT",
-         "connection":"close",
-         "content-length":"7"
-      },
-      "request":{
-         "uri":{
-            "protocol":"https:",
-            "slashes":true,
-            "auth":null,
-            "host":"sms.tivre.com",
-            "port":443,
-            "hostname":"sms.tivre.com",
-            "hash":null,
-            "search":"?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
-            "query":"userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
-            "pathname":"/httppush/send_smsSch.asp",
-            "path":"/httppush/send_smsSch.asp?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1",
-            "href":"https://sms.tivre.com/httppush/send_smsSch.asp?userid=otp@propyoda.com&password=PropYod@!23&msg=%0A%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20Verification%20Link%20Sms%0A%20%20%20%20%20%20%20%20&mobnum=00917987934995&frommobilenoGSM=PRPYDA&TivreID=1"
-         },
-         "method":"GET",
-         "headers":{
-         }
-      }
-   }
-  ]
+   user = "Mobile No|MsgId|TIVRE ID|Send Date|Delivery Date|Status#00917987934995|0|9237530|7/28/2022 7:25:00 PM|7/28/2022 7:25:00 PM|delivrd #"
   newOobj: any = [];
+  ler: string;
+  newOoobj: any;
+  newArr: void;
+  str1: string;
+  str2: string;
+  newCo: { date: Date; }[];
 
   constructor(
     private routerService: NavigationService,
     private authService: UserService,
     public globalService: GlobalService,
+    private notification: NotificationService
   ) {
+    const obj = {
+      date : new Date()
+    }
+    console.log(obj)
     this.signUpForm = new FormGroup({
       name: new FormControl('', Validators.compose([Validators.required])),
       email: new FormControl('', Validators.compose([Validators.required,
@@ -139,15 +116,58 @@ export class RegistrationPage{
     this.pwdIcon = this.showPwd ? 'eye-off-outline' : 'eye-outline';
   }
 
+  public newObj(){
+    console.log(this.user);
+    var obj1 = this.user.split("#")
+    console.log(obj1);
+
+
+    this.str1 = obj1[0].toString();
+    console.log(this.str1)
+
+    var obj2 = this.str1.split("|")
+    console.log(obj2)/////////////
+
+    this.str2 = obj1[1].toString();
+    console.log(this.str2)
+
+    var obj3 = this.str2.split("|")
+    console.log(obj3)////////
+    
+    
+    
+    const obj = {};
+     obj2.forEach((element, index) => {
+      obj[element] = obj3[index];
+    });
+    console.log('*********',obj)
+    const date = {
+      date : new Date()
+    }
+    console.log(date)
+
+    Object.keys(obj).forEach(key => obj["Send Date"] = date )
+    console.log('((((())))', obj)
+
+    var val = Math.floor(1000 + Math.random() * 9000);
+    console.log(val);
+
+    var seq = (Math.floor(Math.random() * 40000) + 50000).toString().substring(1);
+    console.log(seq);
+
+
+  }
 
 
   public signUpWithEmail(): void {
     console.log(this.signUpForm.value);
+    this.loading = true;
+    this.authService.checkEmail(this.signUpForm.value.emai);
     this.signUpForm.value.phoneNumber = this.register.phoneNumber;
     this.signUpForm.value.language = this.selectedLanguage;
     this.subscriptions.push(
       this.authService.registerUser(this.signUpForm.value).subscribe(res => {
-        console.log('^^^^^^$$$$$$$$^^^^^', res);
+        // console.log('^^^^^^$$$$$$$$^^^^^', res);
         if (res.status === 200) {
           this.globalService.hideLoading();
 

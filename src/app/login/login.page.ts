@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs-compat/operator/filter';
 import { GlobalService } from '../services/global.service';
+import { ToastrService } from 'ngx-toastr';
+import * as firebase from 'firebase/compat/app';
+import  'firebase/auth';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +20,7 @@ import { GlobalService } from '../services/global.service';
 })
 export class LoginPage {
 
+  loading = false;
   pwdIcon = 'eye-outline';
   showPwd = false;
   onLoginForm: FormGroup;
@@ -40,6 +44,7 @@ export class LoginPage {
       { type: 'minlength', message: 'Password must be at least 6 characters long.' }
     ],
   };
+  constantVariables: any;
 
   constructor(
     public fb: FormBuilder,
@@ -51,7 +56,8 @@ export class LoginPage {
     public loadingCtrl: LoadingController,
     private authService: UserService,
     private router: Router,
-    public globalService: GlobalService
+    public globalService: GlobalService,
+    private toster: ToastrService
   ) {
     this.onLoginForm = this.fb.group({
       email: ['', Validators.compose([Validators.required])],
@@ -95,7 +101,8 @@ export class LoginPage {
           }
         }, {
           text: 'Confirm',
-          handler: async () => {
+          handler: async (e: any) => {
+            this.forgotPassword(e.email);
             const loader = await this.loadingCtrl.create({
               duration: 2000
             });
@@ -118,9 +125,19 @@ export class LoginPage {
     await alert.present();
   }
 
+  public forgotPassword(e): Promise<any> {
+    return firebase.default.auth().sendPasswordResetEmail(e)
+      .then(() => {
+      }).catch((error) => {
+        console.log('error in forgot password', error);
+        this.globalService.showToastMessage('There are some error in sending email.');
+      });
+  }
+
   public login(url: string): void {
     // alert('===============');
     console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&',this.onLoginForm.value);
+    this.loading = true;
     this.errorMsg = '';
     this.submitted = true;
 
@@ -130,11 +147,12 @@ export class LoginPage {
         // console.log('this.loginForm.value', this.loginForm.value);
         this.subscripations.push(
           this.authService.loginUser(this.onLoginForm.value).subscribe(data => {
-            this.onLoginForm.reset();
             console.log('((((((88888888))))))))',data);
+            this.globalService.hideLoading();
             if (data.status === 200) {
               this.globalService.hideLoading();
               this.routerService.navigateTo('profile');
+              this.onLoginForm.reset();
             } else {
               // console.log('data.message.code', data.message.code)
               if (data.message.code === 'auth/user-not-found') {
@@ -144,6 +162,7 @@ export class LoginPage {
               } else if (data.message.code === 'auth/wrong-password') {
                 this.errorMsg = 'This password is wrong';
                 this.globalService.showToastMessage(this.errorMsg);
+                this.loading = false;
                 this.ref.detectChanges();
               } else {
                 this.errorMsg = data.message;
@@ -154,6 +173,7 @@ export class LoginPage {
             }
           }, error => {
             this.globalService.hideLoading();
+            this.toster.error(' Something went wrong!');
             console.log('There are some error in fetching user Info');
           })
         );
